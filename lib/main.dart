@@ -1,4 +1,10 @@
+import 'package:find_jobs/job_card/job_card_footer.dart';
+import 'package:find_jobs/job_card/job_extra.dart';
+import 'package:find_jobs/job_card/job_location_detail.dart';
+import 'package:find_jobs/job_card/job_picture.dart';
+import 'package:find_jobs/job_card/job_summary.dart';
 import 'package:find_jobs/jobs.dart';
+import 'package:find_jobs/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(FindJobsHome());
@@ -48,10 +54,10 @@ class _JobsListing extends State<JobsListing>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        textTheme: appTheme.textTheme,
         title: Text(
           'Find Jobs',
-          style: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+          style: Theme.of(context).textTheme.title,
         ),
         leading: Icon(Icons.menu, color: Colors.black),
         actions: <Widget>[Icon(Icons.filter_list, color: Colors.black)],
@@ -67,19 +73,42 @@ class _JobsListing extends State<JobsListing>
               insets: EdgeInsets.fromLTRB(74, 0, 105, 0)),
         ),
       ),
-      body: TabBarView(
-          controller: _tabController,
-          children: tabs.map((Tab tab) {
-            // final String label = tab.text.toLowerCase();
-            return SafeArea(child: Builder(builder: (context) {
-              return ListView(
-                  key: tab.key,
-                  shrinkWrap: true,
-                  children: fakeJobs.map((fakeJob) {
-                    return _getListItem(fakeJob);
-                  }).toList());
-            }));
-          }).toList()),
+      body: Stack(children: [
+        Positioned(
+          left: 0,
+          bottom: 0,
+          child: Container(
+            padding: EdgeInsets.only(left: 10, top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Icon(Icons.add, color: Colors.white)),
+                Text('Order', style: TextStyle(color: Colors.white))
+              ],
+            ),
+            decoration: BoxDecoration(
+                color: Colors.green[500],
+                borderRadius: BorderRadius.only(topRight: Radius.circular(8))),
+            // color: Colors.black,
+            height: 70,
+            width: 60,
+          ),
+        ),
+        TabBarView(
+            controller: _tabController,
+            children: tabs.map((Tab tab) {
+              return SafeArea(
+                  child: Builder(
+                      builder: (context) => ListView(
+                          key: tab.key,
+                          shrinkWrap: true,
+                          children: fakeJobs
+                              .map((fakeJob) => _getListItem(fakeJob))
+                              .toList())));
+            }).toList()),
+      ]),
     );
   }
 
@@ -90,10 +119,7 @@ class _JobsListing extends State<JobsListing>
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
-              flex: 1,
-              child: Container(
-                  padding: EdgeInsets.all(10), child: fakeJob.picture)),
+          Flexible(flex: 1, child: JobPicture(fakeJob.picture)),
           Flexible(
             flex: 3,
             child: Container(
@@ -101,79 +127,24 @@ class _JobsListing extends State<JobsListing>
               child: Card(
                 elevation: 16,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(8)
-                  )
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(fakeJob.title,
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold)),
-                        Text('\$ ${fakeJob.salary}',
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(fakeJob.subtitle, style: TextStyle(fontSize: 12))
-                      ],
-                    ),
-
-                    SizedBox(height: 20,),
-                    Row(
-                      children: <Widget>[
-                        Text(fakeJob.originTime,
-                            style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        Icon(Icons.my_location, color: Colors.black),
-                        Text(fakeJob.origin)
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(fakeJob.destinationTime,
-                            style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        Icon(Icons.my_location, color: Colors.green),
-                        Text(fakeJob.destination)
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(fakeJob.time, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                        Text('${fakeJob.distance} km', style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                        Text(fakeJob.match, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),
-                        Container(
-                          padding: EdgeInsets.only(left: 10, top: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Align(alignment:  Alignment.topLeft, child: Icon(Icons.keyboard_arrow_right, color: Colors.white)),
-                              Text('Show', style: TextStyle(color: Colors.white))
-                            ],
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(8)
-                            )
-                          ),
-                          // color: Colors.black,
-                          height: 60,
-                          width: 60,
-                        )
-                      ],
-                    )
-                  ],
+                    borderRadius: BorderRadius.all(Radius.circular(8))),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      JobSummary(fakeJob.title, fakeJob.salary),
+                      JobExtra(fakeJob.subtitle),
+                      SizedBox(height: 20),
+                      JobLocationDetail(
+                          fakeJob.origin, fakeJob.originTime, Colors.black),
+                      JobLocationDetail(fakeJob.destination,
+                          fakeJob.destinationTime, Colors.green),
+                      JobCardFooter(
+                          fakeJob.distance, fakeJob.match, fakeJob.time),
+                    ],
+                  ),
                 ),
               ),
             ),
