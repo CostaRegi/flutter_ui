@@ -3,17 +3,36 @@ import 'package:find_jobs/job_card/job_extra.dart';
 import 'package:find_jobs/job_card/job_location_detail.dart';
 import 'package:find_jobs/job_card/job_picture.dart';
 import 'package:find_jobs/job_card/job_summary.dart';
+import 'package:find_jobs/job_detail/job_detail.dart';
 import 'package:find_jobs/jobs.dart';
 import 'package:find_jobs/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(FindJobsHome());
 
+const String JobListingRoute ='/';
+const String JobDetailRoute = '/detail';
+
+Route<dynamic> generateRoute(RouteSettings settings) {
+  switch(settings.name) {
+    case JobListingRoute :
+    return MaterialPageRoute(builder: (context) => JobsListing());
+    case JobDetailRoute:
+    var spec = settings.arguments;
+    return MaterialPageRoute(builder: (context) => JobDetail(spec));
+  }
+}
+
 class FindJobsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: JobsListing(),
+      // routes: {
+      //   '/' : (context) => JobsListing(),
+      //   '/detail' : (context) => JobDetail()
+      // },
+      onGenerateRoute: generateRoute,
+      initialRoute: JobListingRoute,
     );
   }
 }
@@ -124,26 +143,29 @@ class _JobsListing extends State<JobsListing>
             flex: 3,
             child: Container(
               padding: EdgeInsets.only(top: 10),
-              child: Card(
-                elevation: 16,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      JobSummary(fakeJob.title, fakeJob.salary),
-                      JobExtra(fakeJob.subtitle),
-                      SizedBox(height: 20),
-                      JobLocationDetail(
-                          fakeJob.origin, fakeJob.originTime, Colors.black),
-                      JobLocationDetail(fakeJob.destination,
-                          fakeJob.destinationTime, Colors.green),
-                      JobCardFooter(
-                          fakeJob.distance, fakeJob.match, fakeJob.time),
-                    ],
+              child: InkWell(
+                onTap: () { Navigator.pushNamed(context, '/detail', arguments: fakeJob);},
+                child: Card(
+                  elevation: 16,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        JobSummary(fakeJob.title, fakeJob.salary),
+                        JobExtra(fakeJob.subtitle),
+                        SizedBox(height: 20),
+                        JobLocationDetail(
+                            fakeJob.origin, fakeJob.originTime, Colors.black),
+                        JobLocationDetail(fakeJob.destination,
+                            fakeJob.destinationTime, Colors.green),
+                        JobCardFooter(
+                            fakeJob.distance, fakeJob.match, fakeJob.time),
+                      ],
+                    ),
                   ),
                 ),
               ),

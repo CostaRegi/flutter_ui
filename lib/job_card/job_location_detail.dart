@@ -14,7 +14,7 @@ class JobLocationDetail extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(padding: EdgeInsets.only(right: 8), child: Text(_originTime, style: TextStyle(fontSize: 12, color: Colors.grey))),
-          Padding(padding: EdgeInsets.only(right: 8),child: Icon(Icons.my_location, color: _iconColor)),
+          Padding(padding: EdgeInsets.only(right: 8),child: Icon(Icons.radio_button_checked, color: _iconColor)),
           Text(_origin)
         ],
       ),
