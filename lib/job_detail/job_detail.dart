@@ -1,3 +1,5 @@
+import 'package:find_jobs/job_card/job_card_advertiser.dart';
+import 'package:find_jobs/job_card/job_location_indicator.dart';
 import 'package:find_jobs/jobs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +40,10 @@ class _JobDetail extends State<JobDetail> {
         elevation: 0,
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           _TitleSection(widget.spec.title),
-          _LocationSection(widget.spec.origin, widget.spec.destination)
+          JobLocationMoveSteps(widget.spec.origin, widget.spec.destination),
+          JobAdvertiser(widget.spec.picture)
         ],
       ),
     );
@@ -55,23 +57,10 @@ class _TitleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints.expand(height: 100),
-      child: Center(child: Text(_title, style: (Theme.of(context).textTheme.title))),
+      child: Center(
+          child: Text(_title, style: (Theme.of(context).textTheme.title))),
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: .1, color: Colors.grey))),
-    );
-  }
-}
-
-class _LocationSection extends StatelessWidget {
-  final String _origin;
-  final String _destination;
-  _LocationSection(this._origin, this._destination);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[],
-      ),
     );
   }
 }
