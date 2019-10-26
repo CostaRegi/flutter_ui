@@ -1,11 +1,13 @@
 import 'package:find_jobs/job_card/job_card_advertiser.dart';
+import 'package:find_jobs/job_card/job_detail_duration.dart';
 import 'package:find_jobs/job_card/job_location_indicator.dart';
+import 'package:find_jobs/job_card/job_time_spec.dart';
 import 'package:find_jobs/jobs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class JobDetail extends StatefulWidget {
-  JobSpec spec;
+  final JobSpec spec;
   JobDetail(this.spec);
 
   @override
@@ -43,7 +45,9 @@ class _JobDetail extends State<JobDetail> {
         children: <Widget>[
           _TitleSection(widget.spec.title),
           JobLocationMoveSteps(widget.spec.origin, widget.spec.destination),
-          JobAdvertiser(widget.spec.picture)
+          JobAdvertiser(widget.spec.picture),
+          JobDuration(widget.spec.originTime, widget.spec.destinationTime),
+          JobTimeSpec(widget.spec.time, '${widget.spec.distance}', widget.spec.match),
         ],
       ),
     );
